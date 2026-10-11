@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Super Platformer Guy</title>
+
+    <style>
+        * {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canv"></canvas>
+
+    <!-- Engine core -->
+    <script src="../../engine/Vector2.js"></script>
+    <script src="../../engine/Input.js"></script>
+    <script src="../../engine/Engine.js"></script>
+    <script src="../../engine/Component.js"></script>
+    <script src="../../engine/GameObject.js"></script>
+    <script src="../../engine/Scene.js"></script>
+    <script src="../../engine/SceneManager.js"></script>
+    <script src="../../engine/Time.js"></script>
+
+    <!-- Engine components -->
+    <script src="../../engine/components/Transform.js"></script>
+    <script src="../../engine/components/Polygon.js"></script>
+    <script src="../../engine/components/TextLabel.js"></script>
+    <script src="../../engine/components/Camera.js"></script>
+
+    <!-- Game assets -->
+    <script src="./Assets.js"></script>
+
+    <!-- Game components -->
+    <script src="./components/PlatformData.js"></script>
+    <script src="./components/PlayerController.js"></script>
+
+    <!-- Game objects -->
+    <script src="./gameObjects/PlatformGameObject.js"></script>
+    <script src="./gameObjects/PlayerGameObject.js"></script>
+
+    <!-- Scenes -->
+    <script src="./scenes/PlatformerScene.js"></script>
+
+    <script>
+        Engine.start(PlatformerScene)
+    </script>
+</body>
+
+</html>
