@@ -16,6 +16,10 @@ class Engine {
         Engine.ctx = Engine.canvas.getContext("2d")
         addEventListener("keydown", Input.keydown)
         addEventListener("keyup", Input.keyup)
+        addEventListener("mousemove", Input.mousemove)
+        addEventListener("mouseup",Input.mouseup)
+        addEventListener("mousedown",Input.mousedown)
+        
         SceneManager.nextScene = nextScene
 
         if(settings) {

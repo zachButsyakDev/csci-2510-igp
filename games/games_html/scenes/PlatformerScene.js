@@ -10,7 +10,10 @@ class PlatformerScene extends Scene {
 
 
         this.instantiate(new PlatformGameObject(500, 16, "#5c4033"), new Vector2(0, 200))
-        this.instantiate(new LevelControllerGameObject(() => Input.keysDown.includes("Enter"), EndScene))
+        /*
+        make this into an actual conditional, could be an if statement instead of having to do that lambda function deal or whatever.
+        this.instantiate(new LevelControllerGameObject(() => Input.mouseButtonsDown.includes("mouseButton1"), EndScene))
+        */
 
         this.instantiate(new PlatformGameObject(50, 8, "#4a7c59"),  new Vector2(-160, 120))
         this.instantiate(new PlatformGameObject(40, 8, "#4a7c59"),  new Vector2( -60, 60))
