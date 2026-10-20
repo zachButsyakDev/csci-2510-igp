@@ -26,7 +26,7 @@ class Input {
     }
 
 
-    static mosuemove(event) {
+    static mousemove(event) {
         if(Input.mousePosition) {
             Input.mousePositionLastFrame = Input.mousePosition
         }

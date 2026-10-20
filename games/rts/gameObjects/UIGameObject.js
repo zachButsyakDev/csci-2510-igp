@@ -1,0 +1,3 @@
+class UIGameObject extends GameObject {
+
+}
