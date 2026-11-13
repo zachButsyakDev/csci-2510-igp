@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Game Loop</title>
+    <title>RTS</title>
 
     <style>
         * {
@@ -13,10 +13,9 @@
 </head>
 
 <body>
-    <canvas id="canv">
+    <canvas id="canv"></canvas>
 
-    </canvas>
-
+    <!-- Engine core -->
     <script src="../../engine/Vector2.js"></script>
     <script src="../../engine/Input.js"></script>
     <script src="../../engine/Engine.js"></script>
@@ -24,29 +23,47 @@
     <script src="../../engine/GameObject.js"></script>
     <script src="../../engine/Scene.js"></script>
     <script src="../../engine/SceneManager.js"></script>
-
+    <script src="../../engine/Collisions.js"></script>
     <script src="../../engine/Time.js"></script>
 
+    <!-- Engine components -->
     <script src="../../engine/components/Transform.js"></script>
     <script src="../../engine/components/Polygon.js"></script>
     <script src="../../engine/components/TextLabel.js"></script>
     <script src="../../engine/components/Camera.js"></script>
-
-
-
-    <script src="./scenes/Level01.js"></script>
-    <script src="./scenes/Level02.js"></script>
-    <script src="./scenes/GenericLevel.js"></script>
-
+    <script src="../../engine/components/Collider.js"></script>
+    <script src="../../engine/components/RigidBody.js"></script>
+    <!-- Game data -->
     <script src="./Assets.js"></script>
     <script src="./Globals.js"></script>
     <script src="./Settings.js"></script>
 
+    <!-- Components -->
+    <script src="./components/Selectable.js"></script>
+    <script src="./components/UnitController.js"></script>
+    <script src="./components/ResourceController.js"></script>
+    <script src="./components/UIController.js"></script>
+    <script src="./components/Buildable.js"></script>
+    <script src="./components/RTSInputController.js"></script>
+    <script src="./components/CameraController.js"></script>
+
+    <!-- Game objects -->
+    <script src="./gameObjects/PlayerGameObject.js"></script>
+    <script src="./gameObjects/UnitGameObject.js"></script>
+    <script src="./gameObjects/UIGameObject.js"></script>
+    <script src="./gameObjects/GoldTextObject.js"></script>
+    <script src="./gameObjects/LumberTextObject.js"></script>
+    <script src="./gameObjects/LumberYard.js"></script>
+    <script src="./gameObjects/GoldMine.js"></script>
+    <script src="./gameObjects/Farm.js"></script>
+    <script src="./gameObjects/FoodTextObject.js"></script>
+    <script src="./gameObjects/StaticUnitGameObject.js"></script>
+
+    <!-- Scenes -->
+    <script src="./scenes/TestScene.js"></script>
 
     <script>
-
-        //Engine.start(Level01, Settings)
-
+        Engine.start(TestScene, Settings)
     </script>
 </body>
 

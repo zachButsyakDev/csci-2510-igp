@@ -1,70 +1,78 @@
+// Both checks use the Separating Axis Theorem, so shapes must be convex.
 class Collisions {
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    static isCollisionPolygonPolygon(point, gameObject, gameObjectTwo) {
-        //move everything into world space
-        let worldSpacePoints = []
-        for(let point of gameObject.getComponent(Polygon).points) {
-           worldSpacePoints.push(new Vector2(
-               gameObject.transform.getWorldMatrix().transformPoint(point).x,
-               gameObject.transform.getWorldMatrix().transformPoint(point).y
-           ))
 
-        }
-        let worldSpacePointsTwo = []
-        //find axes for projection
-         for(let point of gameObjectTwo.getComponent(Polygon).points) {
-           worldSpacePoints.push(new Vector2(
-               gameObjectTwo.transform.getWorldMatrix().transformPoint(point).x,
-               gameObjectTwo.transform.getWorldMatrix().transformPoint(point).y
-           ))
-        
-        
-        
-        let axes = []
-        for(let i = 0; i < worldSpacePoints.length; i++) {
-            let point1 = worldSpacePoints[i]
-            let point2 = worldSpacePoints[(i + 1) % worldSpacePoints.length]
-            let edge = point2.minus(point1)
-            let axis = edge.orthogonal()
-            axes.push(axis)
+    /**
+     * @param {GameObject} gameObject A game object with a Collider
+     * @returns {Vector2[]} The collider's points in world space
+     */
+    static getWorldPoints(gameObject) {
+        const matrix = gameObject.transform.getWorldMatrix()
+        return gameObject.getComponent(Collider).points.map(point => {
+            const p = matrix.transformPoint(new DOMPoint(point.x, point.y))
+            return new Vector2(p.x, p.y)
+        })
+    }
 
-            //check for overlap
-            let pointProjection = point.dot(axis)
-            let polygonProjections = worldSpacePoints.map(p => p.dot(axis))
-            if(pointProjection < Math.min(...polygonProjections) || pointProjection > Math.max(...polygonProjections)) {
+    /**
+     * One axis per edge: the axis perpendicular to that edge
+     * @param {Vector2[]} points
+     * @param {boolean} normalize Whether each edge is normalized before taking its axis
+     * @returns {Vector2[]}
+     */
+    static getAxes(points, normalize = false) {
+        return points.map((point, i) => {
+            const edge = points[(i + 1) % points.length].minus(point)
+            return (normalize ? edge.normalized() : edge).orthogonal()
+        })
+    }
+
+    /**
+     * @param {Vector2} point A point in world space
+     * @param {GameObject} gameObject A game object with a Collider
+     * @returns {boolean} True if the point is inside the collider
+     */
+    static isCollisionPointPolygon(point, gameObject) {
+        const worldPoints = Collisions.getWorldPoints(gameObject)
+
+        for (const axis of Collisions.getAxes(worldPoints)) {
+            const pointProjection = point.dot(axis)
+            const projections = worldPoints.map(p => p.dot(axis))
+            if(pointProjection < Math.min(...projections) || pointProjection > Math.max(...projections))
                 return false
-            }
-                for(let i = 0; i < worldSpacePoints.length; i++) {
-            let point1 = worldSpacePointsTwo[i]
-            let point2 = worldSpacePointsTwo[(i + 1) % worldSpacePointsTwo.length]
-            let edge = point2.minus(point1)
-            let axis = edge.orthogonal()
-            axes.push(axis)
-
-            //check for overlap
-            
-            for(const axis of axes) {
-           
-                let polygonProjections = worldSpacePoints.map(p => p.dot(axis))
-                let polygonProjectionsTwo = worldSpacePointsTwo.map(p => p.dot(axis))
-                if(Math.max(...polygonProjectionsTwo) < Math.min(...polygonProjections) || Math.min(...polygonProjectionsTwo) > Math.max(...polygonProjections)) {
-                    return false
-            }
-       
-       
         }
-        
-        
-
-
         return true
+    }
+
+    /**
+     * @param {GameObject} gameObject A game object with a Collider
+     * @param {GameObject} gameObjectTwo A game object with a Collider
+     * @returns {Vector2|false} The minimum transform vector to push gameObject out of gameObjectTwo, or false if they don't overlap
+     */
+    static isCollisionPolygonPolygon(gameObject, gameObjectTwo) {
+        const pointsOne = Collisions.getWorldPoints(gameObject)
+        const pointsTwo = Collisions.getWorldPoints(gameObjectTwo)
+
+        const axes = Collisions.getAxes(pointsOne, true).concat(Collisions.getAxes(pointsTwo, true))
+
+        let minimumTransformVector = new Vector2(Number.MAX_VALUE, Number.MAX_VALUE)
+        for(const axis of axes) {
+            const projectionsOne = pointsOne.map(p => p.dot(axis))
+            const projectionsTwo = pointsTwo.map(p => p.dot(axis))
+            // A gap on any axis means they don't touch
+            if(Math.max(...projectionsTwo) < Math.min(...projectionsOne) || Math.min(...projectionsTwo) > Math.max(...projectionsOne))
+                return false
+
+            const minOverlap = Math.min(
+                Math.max(...projectionsTwo) - Math.min(...projectionsOne),
+                Math.max(...projectionsOne) - Math.min(...projectionsTwo)
+            )
+            if(minOverlap < minimumTransformVector.magnitude) {
+                minimumTransformVector = axis.scaled(minOverlap)
+            }
+        }
+
+        if(gameObject.transform.position.minus(gameObjectTwo.transform.position).dot(minimumTransformVector) > 0)
+            return minimumTransformVector
+        return minimumTransformVector.scaled(-1)
     }
 }

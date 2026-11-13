@@ -41,14 +41,18 @@ class Input {
      */
     static keyup(event) {
         let index = Input.keysDown.indexOf(event.code)
-        Input.keysDown.splice(index,1)
+        if(index !== -1) {
+            Input.keysDown.splice(index,1)
+        }
 
         Input.keysUpThisFrame.push(event.code)
     }
 
     static mouseup(event) {
         let index = Input.mouseButtonsDown.indexOf(event.button)
-        Input.mouseButtonsDown.splice(index,1)
+        if(index !== -1) {
+            Input.mouseButtonsDown.splice(index,1)
+        }
         Input.mouseButtonsUpThisFrame.push(event.button)
     }
     

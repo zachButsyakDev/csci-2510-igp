@@ -1,7 +1,7 @@
 class LumberTextObject extends GameObject {
     constructor() {
-        super("LumberTextObject", [], "UI")
-        this.addComponent(new TextLabel(), {text:"Welcome to da game, press enter 2 start", font: "20px Times"})
-
+        // Name must match what UIController looks up: "LumberText"
+        super("LumberText", [], "UI")
+        this.addComponent(new TextLabel(), { text: "Lumber: 0", fillStyle: "#c68642", font: "bold 18px monospace" })
     }
 }

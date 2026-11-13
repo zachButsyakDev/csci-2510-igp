@@ -1,24 +1,19 @@
 class Polygon extends Component {
-    
-    /** @type{String} The fill style (background color) of the polygon*/
+    /** @type{String} */
     fillStyle = "magenta"
 
-    /** @type{Vector2[]} The points in the polygon*/
+    /** @type{Vector2[]} Points relative to the game object's origin */
     points = []
 
     /**
-     * 
-     * @param {CanvasRenderingContext2D} ctx The drawing context
+     * The game object has already applied its transform, so points are drawn in local space.
+     * @param {CanvasRenderingContext2D} ctx
      */
     draw(ctx) {
         ctx.save()
 
-        ctx.translate(this.transform.position.x, this.transform.position.y)
-        ctx.rotate(this.transform.rotation)
-        ctx.scale(this.transform.scale.x, this.transform.scale.y)
-
         ctx.beginPath()
-        for(const point of this.points) {
+        for (const point of this.points) {
             ctx.lineTo(point.x, point.y)
         }
 

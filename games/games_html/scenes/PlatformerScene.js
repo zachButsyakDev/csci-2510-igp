@@ -44,7 +44,6 @@ class PlatformerScene extends Scene {
             fillStyle: "#222222",
             font: "bold 14px monospace"
         })
-        hud.transform.position = new Vector2(12, 22)
-        this.instantiate(hud)
+        this.instantiate(hud, new Vector2(12, 22))
     }
 }

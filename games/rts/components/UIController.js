@@ -1,35 +1,39 @@
+/**
+ * Pushes the player's resource counts into the HUD text objects.
+ * Expects game objects named "Player", "GoldText", "LumberText" and "FoodText".
+ */
 class UIController extends Component {
+    resourceController
+    goldText
+    lumberText
+    foodText
+
     start() {
-        let player = this.scene.findGameObjectByName("Player");
-        if (player) {
-            this.resourceController = player.getComponent(ResourceController);
-        }
+        this.findReferences()
+    }
 
-
-        for (let obj of this.scene.gameObjects) {
-            if (obj.name === "GoldText") {
-                this.goldText = obj.getComponent(TextLabel);
-            }
-            if (obj.name === "LumberText") {
-                this.lumberText = obj.getComponent(TextLabel);
-            }
-            if (obj.name === "FoodText") {
-                this.foodText = obj.getComponent(TextLabel);
-            }
+    // Look things up by name. Safe to call every frame until everything is found.
+    findReferences() {
+        if (!this.resourceController) {
+            this.resourceController = GameObject.find("Player")?.getComponent(ResourceController)
         }
+        if (!this.goldText) this.goldText = GameObject.find("GoldText")?.getComponent(TextLabel)
+        if (!this.lumberText) this.lumberText = GameObject.find("LumberText")?.getComponent(TextLabel)
+        if (!this.foodText) this.foodText = GameObject.find("FoodText")?.getComponent(TextLabel)
     }
 
     update() {
-        if (!this.resourceController) return;
+        this.findReferences()
+        if (!this.resourceController) return
 
         if (this.goldText) {
-            this.goldText.text = `Gold: ${Math.floor(this.resourceController.gold)}`;
+            this.goldText.text = `Gold: ${Math.floor(this.resourceController.gold)}`
         }
         if (this.lumberText) {
-            this.lumberText.text = `Lumber: ${Math.floor(this.resourceController.lumber)}`;
+            this.lumberText.text = `Lumber: ${Math.floor(this.resourceController.lumber)}`
         }
         if (this.foodText) {
-            this.foodText.text = `Food: ${Math.floor(this.resourceController.food)}`;
+            this.foodText.text = `Food: ${Math.floor(this.resourceController.food)}`
         }
     }
 }
